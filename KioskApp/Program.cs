@@ -6,7 +6,14 @@ namespace KioskApp
     {
         static void Main(string[] args)
         {
-            string path = @"C:\Users\bryce\source\repos\LibraryKioskSystem\KioskApp\books.csv";
+            static void ShowHeading(string heading, char ch)
+            {
+                Console.WriteLine(new string(ch, heading.Length));
+                Console.WriteLine(heading);
+                Console.WriteLine(new string(ch, heading.Length));
+            }
+            
+            string path = @"/Users/vicke/Desktop/LibraryKioskSystem/KioskApp/books.csv";
             using (StreamReader reader = new StreamReader(path))
             {
                 AvlTree<Book> avlTree = new AvlTree<Book>();
@@ -24,6 +31,11 @@ namespace KioskApp
                     book.Publisher = cleanedLine[3];
                     avlTree.Add(book);
                 };
+                
+                foreach (var book in avlTree)
+                {
+                    Console.WriteLine(book.Print());
+                }
 
                 List<string> ProcessCSVLine(string lineFromCSV)
                 {

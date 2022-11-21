@@ -28,9 +28,9 @@ namespace KioskApp
 
         //Print() that displays title, author, pages, and publisher
 
-        public void Print()
+        public string Print()
         {
-            Console.WriteLine($"Title: {Title}, Author: {Author}, Pages: {Pages}, Publisher: {Publisher}");
+            return $"Title: {Title}, Author: {Author}, Pages: {Pages}, Publisher: {Publisher}";
         }
 
     }
