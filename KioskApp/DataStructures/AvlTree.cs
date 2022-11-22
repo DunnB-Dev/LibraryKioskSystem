@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using KioskApp;
 
+// Unless otherwise stated, all tree assembly is handles by the NuGet package
+
 namespace System.DataStructures
 {
 	/// <summary>

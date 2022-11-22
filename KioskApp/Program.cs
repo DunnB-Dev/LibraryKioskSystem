@@ -14,8 +14,13 @@ namespace KioskApp
 {
     internal class Program
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// Main execution point for the program. 
+        /// </summary>
+        static void Main()
         {
+            // Showheading displays the heading for the program, 
+            // taking the heading as a string and the character to use as a border
             static void ShowHeading(string heading, char ch)
             {
                 Console.WriteLine(new string(ch, heading.Length));
@@ -25,7 +30,7 @@ namespace KioskApp
 
             ShowHeading("Welcome to the Library Kiosk App", '-');
             
-            BookMenu();
+            BookMenu(); // initial call for the book menu
 
             void BookMenu()
             {
@@ -35,53 +40,56 @@ namespace KioskApp
                 Console.WriteLine("4 - Display all books");
                 Console.WriteLine("5 - Exit the kiosk system");
                 Console.Write("\nPlease make a choice: ");
-                int choice = Convert.ToInt32(Console.ReadLine());
+                int choice = Convert.ToInt32(Console.ReadLine()); // convert the user input to an int for processing by the if statements
 
-
+                //read in the csv file containing the books.
                 string path = @"/Users/vicke/Desktop/LibraryKioskSystem/KioskApp/books.csv";
+                // create a new AVL tree using the book class as the data type
+                // additionally, use streamreader for file operations
                 StreamReader reader = new StreamReader(path);
                 AvlTree<Book> avlTree = new AvlTree<Book>();
+                // list of books to be added to the tree.
                 List<Book> books = avlTree.GetInorderEnumerator().ToList();
                 // Add the newest item split by the comma alone to a new string
                 // array.
                 string bookLine;
                 List<string> cleanedLine;
-                while ((bookLine = reader.ReadLine()) != null)
+                while ((bookLine = reader.ReadLine() ?? string.Empty) != null)
                 {
-                    cleanedLine = ProcessCSVLine(bookLine);
-                    Book book = new Book();
-                    book.Title = cleanedLine[0];
-                    book.Author = cleanedLine[1];
-                    book.Pages = cleanedLine[2];
-                    book.Publisher = cleanedLine[3];
-                    avlTree.Add(book);
+                    cleanedLine = ProcessCSVLine(bookLine); // process the line, cleaning abstract data
+                    Book book = new Book(); // create a new book object
+                    book.Title = cleanedLine[0]; // set the title of the book as the first item in the array from reader.ReadLine()
+                    book.Author = cleanedLine[1]; // set the author of the book as the second item in the array from reader.ReadLine()
+                    book.Pages = cleanedLine[2]; // set the pages of the book as the third item in the array from reader.ReadLine()
+                    book.Publisher = cleanedLine[3]; // set the publisher of the book as the fourth item in the array from reader.ReadLine()
+                    avlTree.Add(book); // add the book to the tree
                 }
                 
-                if (choice == 1)
+                if (choice == 1) // adding the book
                 {
                     Console.WriteLine("Please enter the title of your book: ");
                     Book book = new Book();
-                    book.Title = Console.ReadLine();
+                    book.Title = Console.ReadLine() ?? string.Empty;
                     Console.WriteLine("Please enter the author of your book: ");
-                    book.Author = Console.ReadLine();
+                    book.Author = Console.ReadLine() ?? string.Empty;
                     Console.WriteLine("Please enter the number of pages in your book: ");
-                    book.Pages = Console.ReadLine();
+                    book.Pages = Console.ReadLine() ?? string.Empty;
                     Console.WriteLine("Please enter the publisher of your book: ");
-                    book.Publisher = Console.ReadLine();
-                    avlTree.Add(book);
-                    BookMenu();
+                    book.Publisher = Console.ReadLine() ?? string.Empty;
+                    avlTree.Add(book); // add the book to the tree
+                    BookMenu(); // return to the book menu
                 }
 
                 if (choice == 2)
                 {
                     Console.WriteLine("Please enter the name of the book you wish to remove:");
-                    string search = Console.ReadLine();
+                    string search = Console.ReadLine() ?? string.Empty;
                     
-                    foreach(Book book in books)
+                    foreach(Book book in books) // iterate through the list of books connected to the AVL tree
                     {
                         if (book.Title == search)
                         {
-                            avlTree.Remove(book);
+                            avlTree.Remove(book); // remove the book from the tree
                         }
                     }
                     BookMenu();
@@ -90,25 +98,25 @@ namespace KioskApp
                 if (choice == 3)
                 {
                     Console.WriteLine("Please enter the key you wish to sort by: ");
-                    string key = Console.ReadLine();
+                    string key = Console.ReadLine() ?? string.Empty;
                     if (key == "title")
                     {
-                        books = avlTree.GetInorderEnumerator().ToList();
+                        books = avlTree.GetInorderEnumerator().ToList(); // get the list of books from the tree sorted by title
                         BookMenu();
                     }
                     if (key == "author")
                     {
-                        books = avlTree.GetPostorderEnumerator().ToList();
+                        books = avlTree.GetPostorderEnumerator().ToList(); // get the list of books from the tree sorted by author
                         BookMenu();
                     }
                     if (key == "publisher")
                     {
-                        books = avlTree.GetPreorderEnumerator().ToList();
+                        books = avlTree.GetPreorderEnumerator().ToList(); // get the list of books from the tree sorted by publisher
                         BookMenu();
                     }
                 }
 
-                if (choice == 4)
+                if (choice == 4) //display all books in the tree
                 {
                     Console.WriteLine("Displaying all books.");
                     foreach (var book in avlTree)
@@ -118,20 +126,22 @@ namespace KioskApp
                     BookMenu();
                 }
 
-                if (choice == 5)
+                if (choice == 5) // exit the program
                 {
                     Console.WriteLine("Thank you for using the library kiosk system.");
                     Thread.Sleep(2000);
                     Environment.Exit(0);
                 }
 
-                else if (choice > 5)
+                else if (choice > 5) // input validation
                 {
                     Console.WriteLine("Invalid input!");
                     Thread.Sleep(1000);
                     Console.Clear();
                 }
-
+                
+                
+                // ProcessCSVLine takes a cluttered string and returns a list of strings that is cleaned
                 List<string> ProcessCSVLine(string lineFromCSV)
                 {
                     // Split it based on a comma
