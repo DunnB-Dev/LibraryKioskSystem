@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using KioskApp;
 
 namespace System.DataStructures
 {
@@ -424,6 +425,12 @@ namespace System.DataStructures
 				avlTreeNode = avlTreeNode.Right;
 			}
 			return avlTreeNode.Value;
+		}
+
+		public List<Book> GetPreorderEnumerator()
+		{
+			List<Book> list = new List<Book>();
+			return list;
 		}
 	}
 }
